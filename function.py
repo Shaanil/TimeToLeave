@@ -39,7 +39,8 @@ def travel_time(distance):
     return distance / avg_speed *60  # Convert hours to minutes
 
 def distance(origin, destination):
-    ## Calculate the distance between origin and destination using Haversine formula or any other method
-    ## Return the distance in kilometers
-    distance = 0  # Placeholder for actual distance calculation
-    return distance
+    # Ask Google Routes API for the route
+    # Get distanceMeters from response
+    # Convert meters → kilometers
+    distance =0
+    return distance_km
