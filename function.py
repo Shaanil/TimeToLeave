@@ -1,12 +1,12 @@
+from geocode_search import geocode
+import requests
+
 ##Inputs Needed: 
 # Distance
 # Arrival Time
 #  Buffer Time
 
-maximum_speed = 100  # Maximum speed in km/h
-avg_speed = int(maximum_speed * 0.6 )
-
-
+### Speed is a Factor to be Analyse
 
 def clock(value):
     if isinstance(value, int) or isinstance(value, float):
@@ -30,16 +30,43 @@ def trip_start(reach_time, travel_time):
     return reach_time - travel_time
 
 
-def latest_time(arrival_time, buffer):
-    est_arrival_time = arrival_time - buffer
+
+def latest_time(arrival_time, buffer, origin, destination):
+    est_arrival_time = arrival_time - travel_time(origin, destination) - buffer  
     return est_arrival_time
 
 
-def travel_time(distance):
-    return distance / avg_speed *60  # Convert hours to minutes
+def travel_time (origin, destination):
+    origin = geocode(origin)
+    destination = geocode(destination)
+
+    url = (
+        f"https://router.project-osrm.org/route/v1/driving/"
+        f"{origin[0]},{origin[1]};"
+        f"{destination[0]},{destination[1]}"
+    )
+
+    response = requests.get(url)
+    route = response.json()["routes"][0]
+
+    travel_duration = round(route["duration"])  # Convert seconds to minutes and round to 2 decimal places
+
+    return travel_duration
+
 
 def distance(origin, destination):
-    ## Calculate the distance between origin and destination using Haversine formula or any other method
-    ## Return the distance in kilometers
-    distance = 0  # Placeholder for actual distance calculation
-    return distance
+    origin = geocode(origin)
+    destination = geocode(destination)
+
+    url = (
+        f"https://router.project-osrm.org/route/v1/driving/"
+        f"{origin[0]},{origin[1]};"
+        f"{destination[0]},{destination[1]}"
+    )
+
+    response = requests.get(url)
+    route = response.json()["routes"][0]
+
+    distance_km = round(route["distance"] / 1000, 2)  # Convert cm to km and round to 2 decimal places
+
+    return distance_km
