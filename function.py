@@ -1,12 +1,14 @@
+from osrm_search import orsmDistance ,osrmDuration
 from geocode_search import geocode
 import requests
 
 ##Inputs Needed: 
 # Distance
 # Arrival Time
-#  Buffer Time
+# Buffer Time
 
 ### Speed is a Factor to be Analyse
+# Time to be claculated in Minutes for claculations
 
 def clock(value):
     if isinstance(value, int) or isinstance(value, float):
@@ -24,8 +26,6 @@ def clock(value):
         minutes = int(value[1])
         return (hours * 60 + minutes)
 
-
-
 def trip_start(reach_time, travel_time):
     return reach_time - travel_time
 
@@ -33,40 +33,23 @@ def trip_start(reach_time, travel_time):
 
 def latest_time(arrival_time, buffer, origin, destination):
     est_arrival_time = arrival_time - travel_time(origin, destination) - buffer  
+
+    if est_arrival_time < 0:
+        est_arrival_time += 24 * 60  # Add 24 hours in minutes to wrap around to the previous day
+
+    elif est_arrival_time >= 24 * 60:
+        est_arrival_time -= 24 * 60  # Subtract 24 hours in minutes to wrap around to the next day
+
+    else:
+        est_arrival_time = est_arrival_time  # No adjustment needed
     return est_arrival_time
 
 
 def travel_time (origin, destination):
-    origin = geocode(origin)
-    destination = geocode(destination)
-
-    url = (
-        f"https://router.project-osrm.org/route/v1/driving/"
-        f"{origin[0]},{origin[1]};"
-        f"{destination[0]},{destination[1]}"
-    )
-
-    response = requests.get(url)
-    route = response.json()["routes"][0]
-
-    travel_duration = round(route["duration"])  # Convert seconds to minutes and round to 2 decimal places
-
-    return travel_duration
+    osrm_duration = osrmDuration(geocode(origin), geocode(destination))
+    return osrm_duration
 
 
 def distance(origin, destination):
-    origin = geocode(origin)
-    destination = geocode(destination)
-
-    url = (
-        f"https://router.project-osrm.org/route/v1/driving/"
-        f"{origin[0]},{origin[1]};"
-        f"{destination[0]},{destination[1]}"
-    )
-
-    response = requests.get(url)
-    route = response.json()["routes"][0]
-
-    distance_km = round(route["distance"] / 1000, 2)  # Convert cm to km and round to 2 decimal places
-
-    return distance_km
+    osrm_Distance = orsmDistance(geocode(origin), geocode(destination))
+    return osrm_Distance

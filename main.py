@@ -11,6 +11,4 @@ buffer = clock(input("How much buffer time do you want (minutes)? "))
 print (f"Distance is {distance(origin, destination)} km")
 print(f"Travel Time is {(travel_time(origin, destination))} Minutes")
 print(f"You Will Arrive at {clock(arrival_time)} With a Buffer of {clock(buffer)} Minutes")
-
-### The time shows negative values need to fix that
 print(f"You need to start your trip at {clock(latest_time(arrival_time, buffer, origin, destination))}")

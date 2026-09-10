@@ -13,5 +13,3 @@ def geocode(place):
 
     result = response.json()[0]
     return float(result["lon"]), float(result["lat"])
-
-
