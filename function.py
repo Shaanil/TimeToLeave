@@ -1,4 +1,4 @@
-from osrm_search import orsmDistance ,osrmDuration
+from osrm_search import osrmSearch
 from geocode_search import geocode
 import requests
 
@@ -11,11 +11,10 @@ import requests
 # Time to be claculated in Minutes for claculations
 
 def calculate_trip(origin, destination, arrival_time, buffer):
-    distance_km = distance(origin, destination)
-    travel_time_minutes = travel_time(origin, destination)
-    latest_start_time = latest_time(arrival_time, buffer, origin, destination)
+    distance_km, duration_minutes = distance(origin, destination)
+    latest_start_time = latest_time(arrival_time, buffer, duration_minutes)
 
-    return distance_km, travel_time_minutes, latest_start_time
+    return distance_km, duration_minutes, latest_start_time
 
 def clock(value):
     if isinstance(value, int) or isinstance(value, float):
@@ -38,8 +37,8 @@ def trip_start(reach_time, travel_time):
 
 
 
-def latest_time(arrival_time, buffer, origin, destination):
-    est_arrival_time = arrival_time - travel_time(origin, destination) - buffer  
+def latest_time(arrival_time, buffer, duration_minutes):
+    est_arrival_time = arrival_time - duration_minutes - buffer
 
     if est_arrival_time < 0:
         est_arrival_time += 24 * 60  # Add 24 hours in minutes to wrap around to the previous day
@@ -52,11 +51,7 @@ def latest_time(arrival_time, buffer, origin, destination):
     return est_arrival_time
 
 
-def travel_time (origin, destination):
-    osrm_duration = osrmDuration(geocode(origin), geocode(destination))
-    return osrm_duration
-
 
 def distance(origin, destination):
-    osrm_Distance = orsmDistance(geocode(origin), geocode(destination))
-    return osrm_Distance
+    osrm_Distance, duration_minutes = osrmSearch(geocode(origin), geocode(destination))
+    return osrm_Distance, duration_minutes
