@@ -14,7 +14,12 @@ def calculate_trip(origin, destination, arrival_time, buffer):
     distance_km, duration_minutes = distance(origin, destination)
     latest_start_time = latest_time(arrival_time, buffer, duration_minutes)
 
-    return distance_km, duration_minutes, latest_start_time
+    format_message = [
+        (f"Distance is {distance_km} km"),
+        (f"Duration is {duration_minutes} Minutes"),
+        (f"You need to start your trip at {clock(latest_start_time)} to reach your destination on time."),
+        ]
+    return format_message
 
 def clock(value):
     if isinstance(value, int) or isinstance(value, float):
