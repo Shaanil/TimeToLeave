@@ -11,7 +11,7 @@ def osrmSearch(origin, destination):
     # Extract the distance from the response (in meters)
         distance_meters = data['routes'][0]['distance']
         # Convert distance to kilometers
-        distance_km = round(distance_meters / 1000.0)
+        distance_km = round(distance_meters / 1000.0, 2)
 
     # Extract the duration from the response (in seconds)
         duration_seconds = data['routes'][0]['duration']
