@@ -1,6 +1,6 @@
 from osrm_search import osrmSearch
 from geocode_search import geocode
-import requests
+from message import format_trip_results
 
 ##Inputs Needed: 
 # Distance
@@ -14,12 +14,8 @@ def calculate_trip(origin, destination, arrival_time, buffer):
     distance_km, duration_minutes = distance(origin, destination)
     latest_start_time = latest_time(arrival_time, buffer, duration_minutes)
 
-    format_message = [
-        (f"Distance is {distance_km} km"),
-        (f"Duration is {duration_minutes} Minutes"),
-        (f"You need to start your trip at {clock(latest_start_time)} to reach your destination on time."),
-        ]
-    return format_message
+    return format_trip_results(distance_km,duration_minutes,clock(latest_start_time))
+     
 
 def clock(value):
     if isinstance(value, int) or isinstance(value, float):

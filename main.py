@@ -9,5 +9,4 @@ buffer = clock(input("How much buffer time do you want (minutes)? "))
 ## OUTPUT
 message = calculate_trip(origin, destination, arrival_time, buffer)
 
-for n in message:
-    print (n)
+print(message)
