@@ -1,6 +1,5 @@
 # Files to ignore
 .venv
-.venv
 .env
 __pycache__/
 
