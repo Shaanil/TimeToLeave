@@ -16,7 +16,7 @@ def orsmDistance(origin, destination):
     distance_meters = data['routes'][0]['distance']
 
     # Convert distance to kilometers
-    distance_km = distance_meters / 1000.0
+    distance_km = round(distance_meters / 1000.0)
 
     return distance_km
 

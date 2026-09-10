@@ -10,6 +10,13 @@ import requests
 ### Speed is a Factor to be Analyse
 # Time to be claculated in Minutes for claculations
 
+def calculate_trip(origin, destination, arrival_time, buffer):
+    distance_km = distance(origin, destination)
+    travel_time_minutes = travel_time(origin, destination)
+    latest_start_time = latest_time(arrival_time, buffer, origin, destination)
+
+    return distance_km, travel_time_minutes, latest_start_time
+
 def clock(value):
     if isinstance(value, int) or isinstance(value, float):
         hours = int(int(value)/60)
