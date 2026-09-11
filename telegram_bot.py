@@ -21,45 +21,20 @@ def send_message(chat_id, text):
     return response.json()
 
 
-url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getUpdates"
-response = requests.get(url)
-data = response.json()
+def get_update():
 
-if data["result"]:
-    update = data["result"][-1]
-    message = update.get("message")
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getUpdates"
 
-    if message:
-        text = message.get("text", "")
-        chat_id = message["chat"]["id"]
+    response = requests.get(url)
+    data= response.json()
 
-        if text == "/start":
-            send_message(
-                chat_id,
-                "Welcome to TimeToLeave! 🚗\n\nUse /help to learn how to use the bot."
-            )
+    for i in data["result"]:
+        print ()
+        print ("Name:",i['message']['chat']['first_name'],
+               ", ChatID:",i['message']['chat']['id'],
+                ", Date:",i["message"]['date'],
+                ", Message:",i["message"]['text'])
 
-        elif text == "/help":
-            send_message(
-                chat_id,
-                "TimeToLeave helps you calculate when you should leave for a trip.\n\n"
-                "Use /plan to plan a trip."
-            )
+#get_update()
 
-        elif text == "/plan":
-            send_message(
-                chat_id,
-                "Trip planning is coming next! 🚗\n\n"
-                "We will connect this command to calculate_trip()."
-            )
-
-        else:
-            send_message(
-                chat_id,
-                "Sorry, I didn't understand. Try /help."
-            )
-
-        print("Message:", text)
-        print("Chat ID:", chat_id)
-else:
-    print("No new messages.")
+send_message(1502669427 ,input("Enter a Message: "))
