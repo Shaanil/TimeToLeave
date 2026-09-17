@@ -1,21 +1,19 @@
-import requests
+import math
+import os
+from services import ServiceError, request_json
+
 
 def osrmSearch(origin, destination):
-    # Construct the OSRM API URL
-        url = f"http://router.project-osrm.org/route/v1/driving/{origin[0]},{origin[1]};{destination[0]},{destination[1]}?overview=false"
-    
-        # Send a GET request to the OSRM API
-        response = requests.get(url)
-        data = response.json() 
-
-    # Extract the distance from the response (in meters)
-        distance_meters = data['routes'][0]['distance']
-        # Convert distance to kilometers
-        distance_km = round(distance_meters / 1000.0, 2)
-
-    # Extract the duration from the response (in seconds)
-        duration_seconds = data['routes'][0]['duration']
-        # Convert duration to minutes
-        duration_minutes = round(duration_seconds / 60.0)
-
-        return distance_km, duration_minutes
+    base = os.getenv('ROUTING_URL', 'https://router.project-osrm.org').rstrip('/')
+    data = request_json('GET', f'{base}/route/v1/driving/{origin[0]},{origin[1]};{destination[0]},{destination[1]}',
+                        params={'overview': 'false'})
+    try:
+        if data['code'] != 'Ok':
+            raise ValueError
+        route = data['routes'][0]
+        meters, seconds = float(route['distance']), float(route['duration'])
+        if not all(math.isfinite(v) and v >= 0 for v in (meters, seconds)):
+            raise ValueError
+        return round(meters / 1000, 2), math.ceil(seconds / 60)
+    except (KeyError, IndexError, TypeError, ValueError):
+        raise ServiceError('No valid driving route was found for these locations.') from None

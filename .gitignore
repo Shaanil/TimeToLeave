@@ -1,6 +1,9 @@
 # Files to ignore
 .venv
-.venv
 .env
 __pycache__/
 
+*.sqlite3*
+.pytest_cache/
+.env.*
+!.env.example
