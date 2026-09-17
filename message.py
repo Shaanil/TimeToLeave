@@ -1,7 +1,6 @@
-
-def format_trip_results(distance_km,duration_minutes,latest_start_time):
-
-    format_message = (f"Distance is {distance_km} km\n"
-                      f"Duration is {duration_minutes} Minutes\n"
-                      f"You need to start your trip at {(latest_start_time)} to reach your destination on time.")
-    return format_message
+def format_trip_results(distance_km, duration_minutes, latest_start_time):
+    return (f'Distance: {distance_km} km\n'
+            f'Estimated driving duration: {duration_minutes} minutes\n'
+            f'Leave by {latest_start_time}.\n'
+            'Times use your local clock. Estimates exclude live traffic and stops.\n'
+            'Map data © OpenStreetMap contributors (https://www.openstreetmap.org/copyright).')

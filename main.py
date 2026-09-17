@@ -1,12 +1,23 @@
-from function import calculate_trip, clock
+from dotenv import load_dotenv
+from function import calculate_trip, clock, parse_buffer
+from services import ServiceError
 
-## INPUT
-origin = input("Enter your origin: ")
-destination = input("Enter your destination: ")
-arrival_time = clock(input("What time do you want to reach your destination? "))
-buffer = clock(input("How much buffer time do you want (minutes)? "))
 
-## OUTPUT
-message = calculate_trip(origin, destination, arrival_time, buffer)
+def main():
+    load_dotenv()
+    try:
+        origin = input('Enter your origin: ')
+        destination = input('Enter your destination: ')
+        arrival = clock(input('Arrival time (24-hour HH:MM): '))
+        buffer = parse_buffer(input('Buffer time (whole minutes): '))
+        print(calculate_trip(origin, destination, arrival, buffer))
+        return 0
+    except (ValueError, ServiceError) as exc:
+        print(f'Error: {exc}')
+        return 1
+    except (KeyboardInterrupt, EOFError):
+        return 130
 
-print(message)
+
+if __name__ == '__main__':
+    raise SystemExit(main())
